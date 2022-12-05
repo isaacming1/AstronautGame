@@ -39,10 +39,20 @@ public class BasicGameApp implements Runnable {
 
 	public BufferStrategy bufferStrategy;
 	public Image astroPic;
+	public Image spongebobPic;
+
+	public Image pineapplePic;
+
+	public Image backgroundPic;
 
 	//Declare the objects used in the program
 	//These are things that are made up of more than one variable type
-	private Astronaut astro;
+	public Astronaut astro;
+	public Astronaut spongebob;
+
+	public Astronaut pineapple;
+
+	public boolean spongebobAstroCrashing = false;
 
 	// Main method definition
 	// This is the code that runs first and automatically
@@ -63,6 +73,28 @@ public class BasicGameApp implements Runnable {
 		astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
 		astro = new Astronaut("astro",10,100); //construct the astronaut
 
+		//adjust the size
+		astro.width = 100;
+		astro.height = 100;
+
+
+		spongebobPic = Toolkit.getDefaultToolkit().getImage("spongebob.png");
+		spongebob = new Astronaut("spongebob",200,300);
+
+		//adjust the size
+		spongebob.width = 100;
+		spongebob.height = 100;
+
+		pineapplePic = Toolkit.getDefaultToolkit().getImage("pineapple.png");
+		pineapple = new Astronaut("pineapple",300,400);
+
+		//adjust the size
+		pineapple.width = 250;
+		pineapple.height = 280;
+		pineapple.dx = 0;
+		pineapple.dy = 0;
+
+		backgroundPic = Toolkit.getDefaultToolkit().getImage("background2.png");
 	} // end BasicGameApp constructor
 
 
@@ -78,6 +110,7 @@ public class BasicGameApp implements Runnable {
 		//for the moment we will loop things forever.
 		while (true) {
 			moveThings();  //move all the game objects
+			crash();
 			render();  // paint the graphics
 			pause(20); // sleep for 10 ms
 		}
@@ -85,7 +118,28 @@ public class BasicGameApp implements Runnable {
 
 	public void moveThings() {
 		//calls the move( ) code in the objects
-		astro.move();
+
+			astro.bounce();
+			spongebob.bounce();
+			pineapple.move();
+
+	}
+
+	public void crash() {
+		if (astro.rec.intersects(spongebob.rec) && spongebobAstroCrashing == false) {
+			//change picture
+			//make the direction change
+			astro.dx = -astro.dx;
+			spongebob.dx = -spongebob.dx;
+			spongebobAstroCrashing = true;
+		}
+		if (astro.rec.intersects(spongebob.rec) == false) {
+			spongebobAstroCrashing = false;
+		}
+
+		if (spongebob.rec.intersects(pineapple.rec)){
+			spongebob.dx=-spongebob.dx;
+		}
 
 	}
 
@@ -131,8 +185,14 @@ public class BasicGameApp implements Runnable {
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g.clearRect(0, 0, WIDTH, HEIGHT);
 
+		g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
+
 		//draw the image of the astronaut
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
+
+		g.drawImage(spongebobPic, spongebob.xpos, spongebob.ypos,spongebob.width,spongebob.height,null);
+		g.drawImage(pineapplePic, pineapple.xpos, pineapple.ypos,pineapple.width,pineapple.height,null);
+		g.drawRect(pineapple.rec.x,pineapple.rec.y,pineapple.rec.width,pineapple.rec.height);
 
 		g.dispose();
 		bufferStrategy.show();
