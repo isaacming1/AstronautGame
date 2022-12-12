@@ -47,12 +47,14 @@ public class BasicGameApp implements Runnable {
 
 	//Declare the objects used in the program
 	//These are things that are made up of more than one variable type
-	public Astronaut astro;
-	public Astronaut spongebob;
+	public Game astro;
+	public Game spongebob;
 
-	public Astronaut pineapple;
+	public Game pineapple;
 
 	public boolean spongebobAstroCrashing = false;
+
+	public boolean pineappleSpongebobCrashing = false;
 
 	// Main method definition
 	// This is the code that runs first and automatically
@@ -71,7 +73,7 @@ public class BasicGameApp implements Runnable {
 		//variable and objects
 		//create (construct) the objects needed for the game and load up
 		astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
-		astro = new Astronaut("astro",10,100); //construct the astronaut
+		astro = new Game("astro",10,100); //construct the astronaut
 
 		//adjust the size
 		astro.width = 100;
@@ -79,14 +81,15 @@ public class BasicGameApp implements Runnable {
 
 
 		spongebobPic = Toolkit.getDefaultToolkit().getImage("spongebob.png");
-		spongebob = new Astronaut("spongebob",200,300);
+		spongebob = new Game("spongebob",200,300);
 
 		//adjust the size
 		spongebob.width = 100;
 		spongebob.height = 100;
 
+		//call pineapple
 		pineapplePic = Toolkit.getDefaultToolkit().getImage("pineapple.png");
-		pineapple = new Astronaut("pineapple",300,400);
+		pineapple = new Game("pineapple",300,400);
 
 		//adjust the size
 		pineapple.width = 250;
@@ -125,6 +128,7 @@ public class BasicGameApp implements Runnable {
 
 	}
 
+	//boolean so astronaut and spongebob do not glitch
 	public void crash() {
 		if (astro.rec.intersects(spongebob.rec) && spongebobAstroCrashing == false) {
 			//change picture
@@ -134,12 +138,22 @@ public class BasicGameApp implements Runnable {
 			spongebobAstroCrashing = true;
 		}
 		if (astro.rec.intersects(spongebob.rec) == false) {
-			spongebobAstroCrashing = false;
+			pineappleSpongebobCrashing = false;
+		}
+		//boolean so pineapple and spongebob do not glitch
+
+		if (pineapple.rec.intersects(spongebob.rec) && pineappleSpongebobCrashing == false) {
+
+			spongebob.dx = -spongebob.dx;
+			pineappleSpongebobCrashing = true;
 		}
 
-		if (spongebob.rec.intersects(pineapple.rec)){
-			spongebob.dx=-spongebob.dx;
+		if (pineapple.rec.intersects(spongebob.rec)==false)	{
+			pineappleSpongebobCrashing = false;
+
 		}
+
+
 
 	}
 
@@ -192,7 +206,7 @@ public class BasicGameApp implements Runnable {
 
 		g.drawImage(spongebobPic, spongebob.xpos, spongebob.ypos,spongebob.width,spongebob.height,null);
 		g.drawImage(pineapplePic, pineapple.xpos, pineapple.ypos,pineapple.width,pineapple.height,null);
-		g.drawRect(pineapple.rec.x,pineapple.rec.y,pineapple.rec.width,pineapple.rec.height);
+		//g.drawRect(pineapple.rec.x,pineapple.rec.y,pineapple.rec.width,pineapple.rec.height);
 
 		g.dispose();
 		bufferStrategy.show();
