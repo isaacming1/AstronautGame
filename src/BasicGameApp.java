@@ -138,7 +138,7 @@ public class BasicGameApp implements Runnable {
 			spongebobAstroCrashing = true;
 		}
 		if (astro.rec.intersects(spongebob.rec) == false) {
-			pineappleSpongebobCrashing = false;
+			spongebobAstroCrashing = false;
 		}
 		//boolean so pineapple and spongebob do not glitch
 
