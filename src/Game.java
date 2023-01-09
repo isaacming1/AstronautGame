@@ -17,6 +17,14 @@ public class Game {
     public boolean isAlive;           //a boolean to denote if the hero is alive or dead
     public Rectangle rec;             //declares the rectangle hitbox
 
+    public boolean right;
+
+    public boolean down;
+
+    public boolean up;
+
+    public boolean left;
+
 
     //This is a constructor that takes 3 parameters.
     // This allows us to specify the hero's name and position when we build it.
@@ -37,11 +45,41 @@ public class Game {
 
     //The move method.  Everytime this is run (or "called") the hero's x position and y position change by dx and dy
     public void move() { // move
-        xpos = xpos + dx;
-        ypos = ypos + dy;
+//        xpos = xpos + dx;
+//        ypos = ypos + dy;
+
+
+        if (right ==true){
+            xpos = xpos+dx;
+            if (xpos>1000-width){
+                xpos=1000-width;
+            }
+        }
+
+        if(down == true){
+            ypos = ypos +dy;
+            if(ypos>700-height){
+                ypos = 700-height;
+            }
+        }
+
+        if(up==true){
+            ypos = ypos-dy;
+            if(ypos<0){
+                ypos= 0;
+            }
+        }
+
+        if(left == true){
+            xpos = xpos -dx;
+            if(xpos<0){
+                xpos = 0;
+            }
+        }
 
         //declares rectangle
         rec = new Rectangle(xpos,ypos,width,height);
+
 
 
     } // end move
@@ -49,6 +87,7 @@ public class Game {
 
 
     // bounce command if statements
+
     public void bounce() {
         xpos = xpos + dx;
         ypos = ypos + dy;

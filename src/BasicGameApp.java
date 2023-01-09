@@ -17,12 +17,14 @@ import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.event.*;
+
 
 
 //*******************************************************************************
 // Class Definition Section
 
-public class BasicGameApp implements Runnable {
+public class BasicGameApp implements Runnable, KeyListener {
 
 	//Variable Definition Section
 	//Declare the variables used in the program
@@ -70,10 +72,13 @@ public class BasicGameApp implements Runnable {
 
 		setUpGraphics();
 
+		canvas.addKeyListener(this);
+
+
 		//variable and objects
 		//create (construct) the objects needed for the game and load up
 		astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
-		astro = new Game("astro",10,100); //construct the astronaut
+		astro = new Game("astro", 10, 100); //construct the astronaut
 
 		//adjust the size
 		astro.width = 100;
@@ -81,7 +86,7 @@ public class BasicGameApp implements Runnable {
 
 
 		spongebobPic = Toolkit.getDefaultToolkit().getImage("spongebob.png");
-		spongebob = new Game("spongebob",200,300);
+		spongebob = new Game("spongebob", 200, 300);
 
 		//adjust the size
 		spongebob.width = 100;
@@ -89,13 +94,13 @@ public class BasicGameApp implements Runnable {
 
 		//call pineapple
 		pineapplePic = Toolkit.getDefaultToolkit().getImage("pineapple.png");
-		pineapple = new Game("pineapple",300,400);
+		pineapple = new Game("pineapple", 300, 400);
 
 		//adjust the size
 		pineapple.width = 250;
 		pineapple.height = 280;
-		pineapple.dx = 0;
-		pineapple.dy = 0;
+		pineapple.dx = 5;
+		pineapple.dy = 5;
 
 		backgroundPic = Toolkit.getDefaultToolkit().getImage("background2.png");
 	} // end BasicGameApp constructor
@@ -122,9 +127,9 @@ public class BasicGameApp implements Runnable {
 	public void moveThings() {
 		//calls the move( ) code in the objects
 
-			astro.bounce();
-			spongebob.bounce();
-			pineapple.move();
+		astro.bounce();
+		spongebob.bounce();
+		pineapple.move();
 
 	}
 
@@ -148,17 +153,16 @@ public class BasicGameApp implements Runnable {
 			pineappleSpongebobCrashing = true;
 		}
 
-		if (pineapple.rec.intersects(spongebob.rec)==false)	{
+		if (pineapple.rec.intersects(spongebob.rec) == false) {
 			pineappleSpongebobCrashing = false;
 
 		}
 
 
-
 	}
 
 	//Pauses or sleeps the computer for the amount specified in milliseconds
-	public void pause(int time ) {
+	public void pause(int time) {
 		try {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
@@ -204,11 +208,69 @@ public class BasicGameApp implements Runnable {
 		//draw the image of the astronaut
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
 
-		g.drawImage(spongebobPic, spongebob.xpos, spongebob.ypos,spongebob.width,spongebob.height,null);
-		g.drawImage(pineapplePic, pineapple.xpos, pineapple.ypos,pineapple.width,pineapple.height,null);
+		g.drawImage(spongebobPic, spongebob.xpos, spongebob.ypos, spongebob.width, spongebob.height, null);
+		g.drawImage(pineapplePic, pineapple.xpos, pineapple.ypos, pineapple.width, pineapple.height, null);
 		//g.drawRect(pineapple.rec.x,pineapple.rec.y,pineapple.rec.width,pineapple.rec.height);
 
 		g.dispose();
 		bufferStrategy.show();
 	}
+
+
+	@Override
+	public void keyTyped(KeyEvent event) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		char key = event.getKeyChar();     //gets the character of the key pressed
+		int keyCode = event.getKeyCode();  //gets the keyCode (an integer) of the key pressed
+		System.out.println("Key Pressed: " + key + "  Code: " + keyCode);
+
+		if (keyCode == 68) { //d
+			pineapple.right = true;
+
+		}
+		if (keyCode == 83) { //s
+			pineapple.down = true;
+		}
+
+		if (keyCode == 87) { // w
+			pineapple.up = true;
+		}
+
+		if (keyCode == 65) { //a
+			pineapple.left = true;
+		}
+
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent event) {
+
+		char key = event.getKeyChar();
+		int keyCode = event.getKeyCode();
+		//This method will do something when a key is released
+		if (keyCode == 68) {
+			pineapple.right = false;
+		}
+		if (keyCode == 83) {
+			pineapple.down = false;
+		}
+
+		if (keyCode == 65) {
+			pineapple.left = false;
+
+		}
+
+		if (keyCode == 87) {
+			pineapple.up = false;
+
+		}
+
+	}
+
 }
+
